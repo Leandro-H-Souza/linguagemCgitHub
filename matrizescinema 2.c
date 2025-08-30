@@ -12,7 +12,7 @@ int main() {
         }
     }
     do {
-        printf("\n|---------CINEMA ESCAMINOSFLAU--------| \n");
+        printf("\n|---------CINEMA SUPERCINE--------| \n");
         printf("Iniciando sala...\n");
         printf("Sala iniciada com sucesso.\n");
         printf("O que gostaria de fazer?\n");
