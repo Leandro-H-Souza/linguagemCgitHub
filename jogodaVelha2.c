@@ -38,15 +38,14 @@ int verificarVitoria(char tab[LINHA][COLUNA], char player) {
 
 // Modo vs computador
 void jogadaComputador(char tab[LINHA][COLUNA]) {
-    int i, j;
     //\Ele tenta vencer
-    for(int i=0; i < LINHAS; i++){
-        for(int j=0; j < COLUNAS; j++){
+    for(int i=0; i < LINHA; i++){
+        for(int j=0; j < COLUNA; j++){
             if(tab[i][j] == ' '){
-                tab[i][j] = 'o'
+                tab[i][j] = 'o';
                 //simula a jogada
                 if(verificarVitoria (tab, 'o')){
-                    printf("Computador jogou em: %d %d\n", i+1, j+1 );
+                    printf("Computador jogou em: %d %d\n", i+1, j+1);
                     return; 
                     //caso vença o jogo
                 }
@@ -56,12 +55,13 @@ void jogadaComputador(char tab[LINHA][COLUNA]) {
         }
     }
     //Tenta bloquear o jogador
-    for(int i =  0; i < LINHAS; i++){
-        for(int j = 0; j < COLUNAS; j++){
+    for(int i =  0; i < LINHA; i++){
+        for(int j = 0; j < COLUNA; j++){
             if(tab[i][j] == ' '){
                 tab[i][j] = 'x';
                 //simula de novo a jogada do jogador
                 if(verificarVitoria(tab, 'x')){
+                    tab[i][j] = 'o';
                     printf("Computador jogou em: %d %d\n ", i+1, j+1);
                     return;
                 }
@@ -95,6 +95,7 @@ void jogadaComputador(char tab[LINHA][COLUNA]) {
         printf("O computador jogou em : %d %d\n");
         return;
     }
+    int i, j;
     do {
         i = rand() % LINHA;
         j = rand() % COLUNA;
