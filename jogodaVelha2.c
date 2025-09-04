@@ -39,6 +39,62 @@ int verificarVitoria(char tab[LINHA][COLUNA], char player) {
 // Modo vs computador
 void jogadaComputador(char tab[LINHA][COLUNA]) {
     int i, j;
+    //\Ele tenta vencer
+    for(int i=0; i < LINHAS; i++){
+        for(int j=0; j < COLUNAS; j++){
+            if(tab[i][j] == ' '){
+                tab[i][j] = 'o'
+                //simula a jogada
+                if(verificarVitoria (tab, 'o')){
+                    printf("Computador jogou em: %d %d\n", i+1, j+1 );
+                    return; 
+                    //caso vença o jogo
+                }
+                tab[i][j] = ' ';
+                //Desfaz a simulação
+            }
+        }
+    }
+    //Tenta bloquear o jogador
+    for(int i =  0; i < LINHAS; i++){
+        for(int j = 0; j < COLUNAS; j++){
+            if(tab[i][j] == ' '){
+                tab[i][j] = 'x';
+                //simula de novo a jogada do jogador
+                if(verificarVitoria(tab, 'x')){
+                    printf("Computador jogou em: %d %d\n ", i+1, j+1);
+                    return;
+                }
+                tab[i][j] = ' ';
+            }
+        }
+    }
+    //agora para ocupar as posições
+    if(tab[1][1] == ' '){
+        tab[1][1] = 'o';
+        printf("O computador jogou em : %d %d\n");
+        return;
+    }
+    if(tab[0][0] == ' '){
+        tab[0][0] = 'o';
+        printf("O computador jogou em : %d %d\n");
+        return;
+    }
+    if(tab[0][2] == ' '){
+        tab[0][2] = 'o';
+        printf("O computador jogou em : %d %d\n");
+        return;
+    }
+    if(tab[2][0] == ' '){
+        tab[2][0] = 'o';
+        printf("O computador jogou em : %d %d\n");
+        return;
+    }
+    if(tab[2][2] == ' '){
+        tab[2][2] = 'o';
+        printf("O computador jogou em : %d %d\n");
+        return;
+    }
     do {
         i = rand() % LINHA;
         j = rand() % COLUNA;
@@ -135,7 +191,7 @@ int main() {
         printf("\nDeseja jogar novamente? (1 = sim / 0 = não): ");
         scanf("%d", &continuar);
         if (!continuar) break;
-
+        system("cls");
     } while (1);
 
     printf("Obrigado por jogar!\n");
