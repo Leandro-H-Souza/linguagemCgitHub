@@ -1,19 +1,65 @@
 #include <stdio.h>
 #include <locale.h>
 #include <string.h>
-
 #define maxAlunos 50
-
+#define MAX_STRING 79
+#define Registro_Arquivo "dadosDosAlunos.txt"
 struct aluno{
     char nomeAluno[80];
     int idadeAluno;
     float nota1, nota2;
     float media;
     };
+void SalvarDados(struct aluno Turma[], int totalDeAlunos){
+    FILE *arquivo = fopen(Registro_Arquivo, "w");
+    if (arquivo == NULL){
+        printf("Erro: ImpossÃ­vel abrir o arquivo para salvar!\n");
+        return;
+    }
+    fprintf(arquivo, "%d\n", totalDeAlunos);
+    for (int i = 0; i < totalDeAlunos; i++) {
+        fprintf(arquivo, "%s, %d, %.2f, %.2f, %.2f\n",
+                Turma[i].nomeAluno,
+                Turma[i].idadeAluno,
+                Turma[i].nota1,
+                Turma[i].nota2,
+                Turma[i].media);
+    }
+    fclose(arquivo);
+    printf("Dados salvos com sucesso em %s.\n", Registro_Arquivo);
+}
+void CarregandoDados(struct aluno Turma[], int *totalDeAlunos){
+    FILE *arquivo = fopen(Registro_Arquivo, "r");
+
+    if(arquivo == NULL){
+        printf("Arquivo de dados nÃ£o encontrado. Iniciando com turma vazia.\n");
+        *totalDeAlunos = 0;
+        return;
+    }
+    if (fscanf(arquivo, "%d\n", totalDeAlunos) != 1) {
+        printf("Erro de leitura: Arquivo vazio ou corrompido.\n");
+        *totalDeAlunos = 0;
+        fclose(arquivo);
+        return;
+    }
+    for (int i = 0; i < *totalDeAlunos; i++) {
+        if (fscanf(arquivo, " %79[^,], %d, %f, %f, %f\n",
+               Turma[i].nomeAluno,
+               &Turma[i].idadeAluno,
+               &Turma[i].nota1,
+               &Turma[i].nota2,
+               &Turma[i].media) != 5) {
+                printf("Aviso: Leitura de dados parciais. Arquivo pode estar incompleto.\n");
+               *totalDeAlunos = i;
+               break;
+        }
+    }
+    fclose(arquivo);
+    printf("Dados de %d alunos carregados com sucesso.\n", *totalDeAlunos);
+}
 void addAluno(struct aluno Turma[], int *totalDeAlunos){
-    //Checando se a turma está cheia
     if(*totalDeAlunos >= maxAlunos){
-        printf("Turma Cheia! Não é possível adicionar mais alunos\n");
+        printf("Turma Cheia! NÃ£o Ã© possÃ­vel adicionar mais alunos\n");
         return;
     }
     printf("\n----------ADICIONANDO ALUNOS-----------\n");
@@ -26,6 +72,7 @@ void addAluno(struct aluno Turma[], int *totalDeAlunos){
     scanf("%f", &Turma[*totalDeAlunos].nota1);
     printf("Segunda nota: \n" );
     scanf("%f", &Turma[*totalDeAlunos].nota2);
+    Turma[*totalDeAlunos].media = (Turma[*totalDeAlunos].nota1 + Turma[*totalDeAlunos].nota2) / 2.0;
     (*totalDeAlunos)++;
     printf("Aluno adicionado\n");
 
@@ -33,7 +80,7 @@ void addAluno(struct aluno Turma[], int *totalDeAlunos){
 }
 void listAluno(struct aluno Turma[], int  totalDeAlunos){
     if(totalDeAlunos == 0){
-        printf("Não consta nenhum aluno.\n");
+        printf("NÃ£o consta nenhum aluno.\n");
         return;
     }
     printf("----------LISTA DE ALUNOS----------\n");
@@ -43,44 +90,45 @@ void listAluno(struct aluno Turma[], int  totalDeAlunos){
         printf("Idade do aluno: %d\n", Turma[i].idadeAluno);
         printf("Primeira nota: %.2f\n", Turma[i].nota1);
         printf("Segunda nota: %.2f\n", Turma[i].nota2);
-//calculando a média
+//calculando a mï¿½dia
         float media = (Turma[i].nota1 + Turma[i].nota2)/2.0;
-        printf("média do aluno: %.2f\n", media);
+        printf("MÃ©dia do aluno: %.2f\n", Turma[i].media);
     }
 }
 void calculoMedia(struct aluno Turma[], int totalDeAlunos){
     if(totalDeAlunos == 0){
-        printf("Não consta nenhum aluno.\n");
+        printf("NÃ£o consta nenhum aluno.\n");
         return;
     }
     char buscarnome[80];
-    printf("----------CALCULANDO A MÉDIA DO ALUNO----------\n");
+    printf("\n----------CALCULANDO A Mï¿½DIA DO ALUNO----------\n");
     printf("Digite o nome do aluno: \n");
-    scanf(" %[^\n]", buscarnome);
+    scanf(" %79[^\n]", buscarnome);
     int alunoEncontrado = 0;
     for(int i=0; i<totalDeAlunos; i++){
         if(strcmp(Turma[i].nomeAluno, buscarnome)==0){
             float media = (Turma[i].nota1 + Turma[i].nota2)/2.0;
             Turma[i].media= media;
-            printf("Média do aluno %s: %.2f\n", Turma[i].nomeAluno, media);
+            printf("MÃ©dia do aluno %s: %.2f\n", Turma[i].nomeAluno, media);
             alunoEncontrado = 1;
             break;
         }
     }
     if(!alunoEncontrado){
-        printf("Não foi encontrado nenhum aluno com esse nome.");
+        printf("\nNÃ£o foi encontrado nenhum aluno com esse nome.\n");
     }
 }
 void editAluno (struct aluno Turma[], int totalDeAlunos){
     if(totalDeAlunos == 0){
-        printf("Não há alunos registrados.\n");
+        printf("NÃ£o hÃ¡ alunos registrados.\n");
         return;
     }
     char buscarnome[80];
     printf("Digite o nome do aluno: \n");
-    scanf(" %[^\n", buscarnome);
+    scanf(" %79[^\n]", buscarnome);
     int encontrado = 0;
     for(int i=0; i < totalDeAlunos; i++){
+        if(strcmp(Turma[i].nomeAluno, buscarnome) == 0){
         printf("Aluno encontrado, exibindo dados atuais: \n");
         printf("Nome do aluno: %s\n", Turma[i].nomeAluno);
         printf("Idade do aluno: %d\n", Turma[i].idadeAluno);
@@ -96,20 +144,26 @@ void editAluno (struct aluno Turma[], int totalDeAlunos){
         printf("Notas atualizadas com sucesso!\n");
         encontrado = 1;
         break;
+
+        }
+    }
+    if(!encontrado){
+        printf("\nNÃ£o consta nenhum(a) aluno com esse nome\n");
     }
 
 }
 void removerAluno(struct aluno Turma[], int *totalDeAlunos){
     if(*totalDeAlunos == 0){
-        printf("Não há alunos cadastrados para poder remover.\n");
+        printf("NÃ£o hÃ¡ alunos cadastrados para poder remover.\n");
         return;
     }
     char buscarnome[80];
     printf("Digite o nome no aluno para remove-lo: \n");
-    scanf("%[^\n]", buscarnome);
+    scanf("%79[^\n]", buscarnome);
     int encontrado = 0;
     for(int i=0; i < totalDeAlunos; i++){
         if(strcmp(Turma[i].nomeAluno, buscarnome) == 0){
+
             for(int j = i; j < totalDeAlunos - 1; j++){
                 Turma[j] = Turma[j + 1];
             }
@@ -120,26 +174,27 @@ void removerAluno(struct aluno Turma[], int *totalDeAlunos){
         }
     }
     if(!encontrado){
-        printf("Não consta nenhum aluno com esse nome!\n");
+        printf("NÃ£o consta nenhum aluno com esse nome!\n");
     }
 }
 int main(){
-    setlocale (LC_ALL, "portuguese");
-//definindo o vetor de structs
+    setlocale(LC_ALL, "portuguese");
     struct aluno Turma[maxAlunos];
     int totalDeAlunos = 0;
     int opcao;
+    CarregandoDados(Turma, &totalDeAlunos);
     do{
-//fazendo o menu principal
-    printf("-----SISTEMA DE GERENCIAMENTO DE ALUNOS-----\n");
-    printf("Selecione uma das opções: \n");
+
+    printf("\n-----SISTEMA DE GERENCIAMENTO DE ALUNOS-----\n");
+    printf("Selecione uma das opÃ§Ãµes: \n");
     printf("1. Adicionar aluno.\n");
     printf("2. Listar os alunos.\n");
-    printf("3. Calcular a média do aluno.\n");
+    printf("3. Calcular a mÃ©dia do aluno.\n");
     printf("4. Para editar notas do aluno.\n");
     printf("5. Para remover aluno da sala.\n");
-    printf("6. Para sair\n");
+    printf("6. Para salvar os dados e sair.\n");
     scanf("%d", &opcao);
+        while (getchar() != '\n');
         switch(opcao){
             case 1:
                 addAluno(Turma, &totalDeAlunos);
@@ -158,13 +213,12 @@ int main(){
                 removerAluno(Turma, totalDeAlunos);
             break;
             case 6:
-                printf("Encerrando o programa.\n");
+                SalvarDados(Turma, totalDeAlunos);
+                printf("Dados salvos com sucesso. Encerrando o programa.\n");
                 break;
             default:
-                printf("Opção inválida! Verifique e tente novamente.");
+                printf("OpÃ§Ã£o invÃ¡lida! Verifique e tente novamente.");
 
         }
     }
-    while (opcao != 6);
-    return 0;
-    }
+}
