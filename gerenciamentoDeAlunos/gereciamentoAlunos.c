@@ -159,12 +159,11 @@ void removerAluno(struct aluno Turma[], int *totalDeAlunos){
     }
     char buscarnome[80];
     printf("Digite o nome no aluno para remove-lo: \n");
-    scanf("%79[^\n]", buscarnome);
+    scanf(" %79[^\n]", buscarnome);
     int encontrado = 0;
-    for(int i=0; i < totalDeAlunos; i++){
         if(strcmp(Turma[i].nomeAluno, buscarnome) == 0){
 
-            for(int j = i; j < totalDeAlunos - 1; j++){
+            for(int j = i; j < *totalDeAlunos - 1; j++){
                 Turma[j] = Turma[j + 1];
             }
             (*totalDeAlunos)--;
