@@ -151,7 +151,6 @@ void editAluno(struct aluno Turma[], int totalDeAlunos) {
             printf("Sexo do aluno: %c\n", Turma[i].sexo);
             printf("Nota 1: %.2f\n", Turma[i].nota1);
             printf("Nota 2: %.2f\n", Turma[i].nota2);
-
             printf("Digite os novos dados: \n");
             printf("Nova nota 1: \n");
             scanf("%f", &Turma[i].nota1);

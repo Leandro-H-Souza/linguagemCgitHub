@@ -8,8 +8,9 @@ void geraSenha(int comprimento, int maiuscula, int minuscula, int num, int carac
     char incmaiuscula[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     char incminuscula[] = "abcdefghijklmnopqrstuvwxyz";
     char incnumero[] = "0123456789";
-    char inccaracterespecial[] ="!@#$%¨&*()-_=[]{}~?/|:;";
+    char inccaracterespecial[] ="!@#$%ï¿½&*()-_=[]{}~?/|:;";
     if(maiuscula){
+        
         strcat(comp, incmaiuscula);
 
     }
@@ -23,7 +24,7 @@ void geraSenha(int comprimento, int maiuscula, int minuscula, int num, int carac
         strcat(comp, inccaracterespecial);
     }
     else{
-        printf("Não há como gerar uma senha.\n");
+        printf("Nï¿½o hï¿½ como gerar uma senha.\n");
         return 1;
     }
     for(int i = 0; i < comprimento; i++){
@@ -45,18 +46,18 @@ int main(){
     int comprimento, maiuscula, minuscula, num, caracEspecial, novasenha;
     printf("----------GERADOR DE SENHAS----------\n");
     do{
-            printf("Forneça o número de carateres: \n");
+            printf("Forneï¿½a o nï¿½mero de carateres: \n");
             scanf(" %d", &comprimento);
-            printf("Incluir letras maisculas (1- Sim, 0- Não)?\n");
+            printf("Incluir letras maisculas (1- Sim, 0- Nï¿½o)?\n");
             scanf(" %d", &maiuscula);
-            printf("Incluir letras minúsculas (1- Sim, 0- Não)?\n");
+            printf("Incluir letras minï¿½sculas (1- Sim, 0- Nï¿½o)?\n");
             scanf(" %d",&minuscula);
-            printf("Incluir números (1- Sim, 0- Não)?\n");
+            printf("Incluir nï¿½meros (1- Sim, 0- Nï¿½o)?\n");
             scanf(" %d", &num);
-            printf("Incluir caracteres especiais (1- Sim, 0- Não)?\n");
+            printf("Incluir caracteres especiais (1- Sim, 0- Nï¿½o)?\n");
             scanf(" %d", &caracEspecial);
             geraSenha(comprimento, maiuscula, minuscula, num, caracEspecial);
-        printf("Gostaria de gerar uma nova senha (1- Sim, 0- Não)?\n");
+        printf("Gostaria de gerar uma nova senha (1- Sim, 0- Nï¿½o)?\n");
         scanf(" %d", &novasenha);
     }
     while(novasenha != 0);
