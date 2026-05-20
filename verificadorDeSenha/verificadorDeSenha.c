@@ -1,8 +1,8 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#define MAX_SENHA 20
-#define PROXIMIDADE 2//proximidade da senha
+#define MAX_SENHA 80
+#define PROXIMIDADE 1//proximidade da senha
 int menor(int a, int b, int c){
     //para ajudar a encontrar menor de três valores
     int m = a;
@@ -45,28 +45,27 @@ int main(){
         perror("Erro ao abrir o arquivo!\n");
         return 1;
     }
-    printf("Analizando a segurança da senha\n");
+    printf("Analizando a seguranca da senha\n");
     while (fgets(senhaLista, sizeof(senhaLista), arq) != NULL) {
         limpaLinha(senhaLista);
-        //Pra pular linhas vazias
+
         if (strlen(senhaLista) == 0) continue;
+        /*printf("Usuario = [%s] (%lu bytes) | Lista = [%s] (%lu bytes)\n", 
+               senhaUsuario, (unsigned long)strlen(senhaUsuario), senhaLista, (unsigned long)strlen(senhaLista));*/
         if (strcmp(senhaUsuario, senhaLista) == 0) { 
-        if (strcmp(senhaUsuario, senhaLista) == 0) {
             printf("Senha encontrada exatamente igual na lista!\n");
             exata = 1;
             break;
         }
-        //Verificando proximidade 
         int distancia = levenshtein(senhaUsuario, senhaLista);
-       if(distancia <= PROXIMIDADE) {
-            printf("Senha muito proxima da senha '%s' (Distancia: %d)\n", senhaLista, distancia);
+        if(distancia <= PROXIMIDADE) {
+            printf("Senha muito proxima de '%s' (Distancia: %d)\n", senhaLista, distancia);
             parcial = 1;
         }
     }
     if(!exata && !parcial){
-        printf("Sua senha nao foi encontrada na lista nem uma versão proxima dela!");
+        printf("Sua senha nao foi encontrada na lista nem uma versao proxima dela!");
+    }   
     fclose(arq);
     return 0;
-        }   
-    }
 }
